@@ -117,7 +117,7 @@ async function enviar() {
 
     try {
         // Troque 'SEU_SERVER_URL' pela URL pública do Flask (ou IP da sua máquina)
-        const res = await fetch("http://192.168.1.1/chat", {
+        const res = await fetch("https://server-py-13b6.onrender.com/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ mensagem })
