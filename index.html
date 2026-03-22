@@ -36,6 +36,7 @@
             margin: 8px 0;
             border-radius: 10px;
             line-height: 1.4;
+            word-wrap: break-word;
         }
 
         .user {
@@ -83,6 +84,7 @@
 </head>
 
 <body>
+
 <div class="header">🤖 Prick IA</div>
 
 <div class="chat" id="chat"></div>
@@ -96,6 +98,7 @@
 async function enviar() {
     const input = document.getElementById("msg");
     const chat = document.getElementById("chat");
+
     const mensagem = input.value.trim();
     if (!mensagem) return;
 
@@ -116,19 +119,28 @@ async function enviar() {
     chat.scrollTop = chat.scrollHeight;
 
     try {
-        // Troque 'SEU_SERVER_URL' pela URL pública do Flask (ou IP da sua máquina)
         const res = await fetch("https://server-py-13b6.onrender.com/chat", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mensagem })
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ mensagem: mensagem })
         });
 
+        // Verifica se deu erro HTTP
+        if (!res.ok) {
+            botMsg.innerText = "Erro no servidor!";
+            return;
+        }
+
         const data = await res.json();
-        botMsg.innerText = data.resposta;
+
+        // Evita erro se vier vazio
+        botMsg.innerText = data.resposta || "Sem resposta da IA.";
 
     } catch (erro) {
         botMsg.innerText = "Erro ao conectar!";
-        console.error(erro);
+        console.error("Erro:", erro);
     }
 
     chat.scrollTop = chat.scrollHeight;
@@ -136,7 +148,9 @@ async function enviar() {
 
 // Enviar com ENTER
 document.getElementById("msg").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") enviar();
+    if (e.key === "Enter") {
+        enviar();
+    }
 });
 </script>
 
