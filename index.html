@@ -95,12 +95,16 @@
 </div>
 
 <script>
+let historico = [];
+
 async function enviar() {
     const input = document.getElementById("msg");
     const chat = document.getElementById("chat");
 
     const mensagem = input.value.trim();
     if (!mensagem) return;
+
+    historico.push({ role: "user", content: mensagem });
 
     // Mensagem do usuário
     const userMsg = document.createElement("div");
